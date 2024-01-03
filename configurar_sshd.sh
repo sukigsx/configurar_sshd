@@ -116,7 +116,7 @@ sleep 2
 
 # Función para activar la autenticación por contraseña
 activar_password() {
-    sudo sed -i '/PasswordAuthentication/ c\PasswordAuthentication yes/' "$ssh_config"
+    sudo sed -i '/PasswordAuthentication/ c\PasswordAuthentication yes' "$ssh_config"
     sudo service ssh restart
     echo ""
     echo -e "${verde} La autenticación por contraseña se ha activado.${borra_colores}"
@@ -126,7 +126,7 @@ activar_password() {
 
 # Función para desactivar la autenticación por contraseña
 desactivar_password() {
-    sudo sed -i 'PasswordAuthentication/ c\PasswordAuthentication no/' "$ssh_config"
+    sudo sed -i 'PasswordAuthentication/ c\PasswordAuthentication no' "$ssh_config"
     sudo service ssh restart
     echo "" 
     echo -e "${verde} La autenticación por contraseña se ha desactivado.${borra_colores}"
