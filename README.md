@@ -31,7 +31,16 @@ El menú se ejecuta en un bucle hasta que el usuario elige salir (opción 99).
 ## SE IRAN COLOCANDO NUEVAS OPCIONES AL MENU
 
 ## Instalacion
-ejecutar git clone https://github.com/sukigsx/configurar_sshd.git
-luego ejecutar ./configurar_sshd.sh o bien bash configurar_sshd.sh
+ejecutar el siguiente comando:
 
+    git clone https://github.com/sukigsx/configurar_sshd.git
+entrar en la carpeta y ejecutar:
+
+    ./configurar_sshd.sh
+o bien:
+
+    bash configurar_sshd.sh
+Tambien puedes utilizar mi script (ejecutar_escripts), en el cual puedes instalar todos mis script del repositorio.
+
+    git clone https://github.com/sukigsx/ejecutar_scripts.git
 # ESPERO OS GUSTE.....
