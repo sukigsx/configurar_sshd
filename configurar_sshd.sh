@@ -98,6 +98,59 @@ fi
 }
 
 # EMPIEZA LO GORDO
+check_ssh_status() {
+    echo -e "Comprobando el estado del servidor SSH..."
+    echo ""
+
+    # 1️⃣ Detectar nombre del servicio
+    local service_name=""
+    if systemctl list-unit-files | grep -q '^ssh\.service'; then
+        service_name="ssh"
+    elif systemctl list-unit-files | grep -q '^sshd\.service'; then
+        service_name="sshd"
+    else
+        echo -e "${rojo}No se encontró ningún servicio SSH registrado en systemd${borra_colores}"
+        return 2
+    fi
+
+    # 2️⃣ Comprobar si está en ejecución
+    if systemctl is-active --quiet "$service_name"; then
+        echo -e "${verde}El servicio ${borra_colores}$service_name ${verde}está en ejecución${borra_colores}"
+    else
+        echo -e "${amarillo}El servicio${borra_colores} $service_name${amarillo} NO está en ejecución${borra_colores}"
+    fi
+
+    # 3️⃣ Comprobar si está habilitado al arranque
+    if systemctl is-enabled --quiet "$service_name"; then
+        echo -e "${verde}El servicio${borra_colores} $service_name ${verde}está habilitado para iniciar al arranque${borra_colores}"
+    else
+        echo -e "${amarillo}El servicio${borra_colores} $service_name ${amarillo}NO está habilitado al arranque${borra_colores}"
+    fi
+
+    # 4️⃣ Detectar el puerto configurado (en /etc/ssh/sshd_config)
+    local ssh_port
+    if [ -f /etc/ssh/sshd_config ]; then
+        ssh_port=$(grep -E '^Port ' /etc/ssh/sshd_config | awk '{print $2}' | tail -n 1)
+        # Si no hay línea Port, usar el valor por defecto (22)
+        if [ -z "$ssh_port" ]; then
+            ssh_port=22
+        fi
+        echo -e "${azul}El servidor SSH usa el puerto:${borra_colores} $ssh_port"
+    else
+        echo -e "${rojo}No se encontró el archivo de configuración${borra_colores} /etc/ssh/sshd_config"
+    fi
+
+    # 5️⃣ Verificar si el puerto está escuchando
+    if ss -tlnp 2>/dev/null | grep -q ":$ssh_port "; then
+        echo -e "${verde}El puerto${borra_colores} $ssh_port ${verde}está escuchando conexiones SSH${borra_colores}"
+    else
+        echo -e "${amarillo}El puerto${borra_colores} $ssh_port ${amarillo}no está escuchando (el servicio puede estar detenido o bloqueado por firewall)${borra_colores}"
+    fi
+
+    echo ""
+}
+
+
 
 clear
 echo ""
@@ -141,7 +194,12 @@ ssh_config="/etc/ssh/sshd_config"
 while :
 do
 
+
+# Ruta al archivo de configuración de SSH
+ssh_config="/etc/ssh/sshd_config"
+
 clear
+check_ssh_status
 echo -e "${rosa}"; figlet -c sukigsx; echo -e "${borra_colores}"
 echo ""
 echo -e "${verde} Diseñado por sukigsx / Contacto:   scripts@mbbsistemas.es${borra_colores}"
