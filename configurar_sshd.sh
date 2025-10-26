@@ -209,6 +209,7 @@ echo -e "${verde} Nombre del script < $0 > Configuracion por menus de las princi
 echo ""
 echo -e "${verde} Configurado =${borra_colores} $configurar${verde}. Conexion a internet =${borra_colores} $conexion${verde}. Software necesario =${borra_colores} $software${verde}. Script actualizado =${borra_colores} $actualizado."
 echo ""
+check_ssh_status
 echo -e "${azul}  1. Activar la autenticación por contraseña.${borra_colores}"
 echo -e "${azul}  2. Desactivar la autenticación por contraseña.${borra_colores}"
 echo ""
@@ -220,7 +221,6 @@ echo -e "${azul}  7. Opcion vacia de momento.${borra_colores}"
 echo ""
 echo -e "${azul} 99. Salir.${borra_colores}"
 echo ""
-check_ssh_status
 
 read -p " Seleciona opcion del menu -> " opcion
 
