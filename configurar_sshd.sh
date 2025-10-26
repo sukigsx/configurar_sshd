@@ -199,7 +199,7 @@ do
 ssh_config="/etc/ssh/sshd_config"
 
 clear
-check_ssh_status
+
 echo -e "${rosa}"; figlet -c sukigsx; echo -e "${borra_colores}"
 echo ""
 echo -e "${verde} Diseñado por sukigsx / Contacto:   scripts@mbbsistemas.es${borra_colores}"
@@ -220,6 +220,8 @@ echo -e "${azul}  7. Opcion vacia de momento.${borra_colores}"
 echo ""
 echo -e "${azul} 99. Salir.${borra_colores}"
 echo ""
+check_ssh_status
+
 read -p " Seleciona opcion del menu -> " opcion
 
 case $opcion in
