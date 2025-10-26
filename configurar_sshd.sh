@@ -99,7 +99,7 @@ fi
 
 # EMPIEZA LO GORDO
 check_ssh_status() {
-    echo -e "Comprobando el estado del servidor SSH..."
+    echo -e "${azul}Comprobando el estado del servidor SSH${borra_colores}"
     echo ""
 
     # 1️⃣ Detectar nombre del servicio
@@ -115,16 +115,16 @@ check_ssh_status() {
 
     # 2️⃣ Comprobar si está en ejecución
     if systemctl is-active --quiet "$service_name"; then
-        echo -e "${verde}El servicio ${borra_colores}$service_name ${verde}está en ejecución${borra_colores}"
+        echo -e "${verde}Ejecucion del servicio ${borra_colores}$service_name ${verde}SI${borra_colores}"
     else
-        echo -e "${amarillo}El servicio${borra_colores} $service_name${amarillo} NO está en ejecución${borra_colores}"
+        echo -e "${amarillo}Ejecucion del servicio${borra_colores} $service_name ${amarillo}NO${borra_colores}"
     fi
 
     # 3️⃣ Comprobar si está habilitado al arranque
     if systemctl is-enabled --quiet "$service_name"; then
-        echo -e "${verde}El servicio${borra_colores} $service_name ${verde}está habilitado para iniciar al arranque${borra_colores}"
+        echo -e "${verde}Servicio habilitado en el arranque${borra_colores} $service_name ${verde}SI${borra_colores}"
     else
-        echo -e "${amarillo}El servicio${borra_colores} $service_name ${amarillo}NO está habilitado al arranque${borra_colores}"
+        echo -e "${amarillo}Servicio habilitado en el arranque${borra_colores} $service_name ${amarillo}NO${borra_colores}"
     fi
 
     # 4️⃣ Detectar el puerto configurado (en /etc/ssh/sshd_config)
