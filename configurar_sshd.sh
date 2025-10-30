@@ -215,7 +215,6 @@ activar_x11() {
     # Verificar si el servicio se reinició correctamente
     if systemctl is-active --quiet sshd; then
         echo ""
-        echo -e "${verde} El servidor SSH ahora escucha en el puerto${borra_colores} $nuevo_puerto."; sleep 1
     else
         echo ""
         echo -e "${rojo} Error al reiniciar el servicio SSH. Revisa la configuración manualmente.${borra_colores}"; sleep 2
@@ -237,7 +236,6 @@ desactivar_x11() {
     # Verificar si el servicio se reinició correctamente
     if systemctl is-active --quiet sshd; then
         echo ""
-        echo -e "${verde} El servidor SSH ahora escucha en el puerto${borra_colores} $nuevo_puerto."; sleep 1
     else
         echo ""
         echo -e "${rojo} Error al reiniciar el servicio SSH. Revisa la configuración manualmente.${borra_colores}"; sleep 2
