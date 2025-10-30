@@ -79,7 +79,7 @@ else
     echo ""
     echo -e "${amarillo} El script se ha actualizado, es necesario cargarlo de nuevo.${borra_colores}"
     echo -e ""
-    read -p " Pulsa una tecla para continuar." pause
+    #read -p " Pulsa una tecla para continuar." pause
     exit
 fi
 }
@@ -186,7 +186,7 @@ clear
 figlet -c Gracias por
 figlet -c utilizar mi
 figlet -c script
-wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
+#wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
 sleep 2
 exit
 }
