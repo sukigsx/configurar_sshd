@@ -182,9 +182,9 @@ trap ctrl_c INT
 function ctrl_c()
 {
 clear
-figlet -c Gracias por
-figlet -c utilizar mi
-figlet -c script
+echo -e ""
+echo -e "${azul} GRACIAS POR UTILIZAR MI SCRIPT${borra_colores}"
+echo -e ""
 #wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
 sleep 2
 exit
@@ -204,12 +204,12 @@ desactivar_password() {
 cambiar_puerto_escucha(){
 # Pedir el nuevo puerto
 echo ""
-read -p " Introduce el nuevo puerto SSH (1024-65535): " nuevo_puerto
+read -p " Introduce el nuevo puerto SSH (1-65535): " nuevo_puerto
 
 # Validar que sea un número válido
 if ! [[ "$nuevo_puerto" =~ ^[0-9]+$ ]] || [ "$nuevo_puerto" -lt 1 ] || [ "$nuevo_puerto" -gt 65535 ]; then
   echo ""
-  echo -e "${rojo} Puerto inválido. Debe ser un número entre 1024 y 65535.${borra_colores}"; sleep 2
+  echo -e "${rojo} Puerto inválido. Debe ser un número entre 1 y 65535.${borra_colores}"; sleep 2
   return
 fi
 
