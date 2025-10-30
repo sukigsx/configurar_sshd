@@ -202,21 +202,21 @@ desactivar_password() {
 
 # Función para activar x11
 activar_x11() {
-    sudo sed -i '/X11Forwarding/ c\X11Forwarding yes' "$ssh_config"
+    sudo sed -i '/X11Forwarding/ c\     X11Forwarding yes' "$ssh_config"
     sudo service ssh restart
     echo ""
     echo -e "${verde} Reenvío (forwarding) del entorno gráfico${borra_colores} ACTIVADO."
-    echo ""; sleep 1
+    echo ""; sleep 2
     return
 }
 
 # Función para desactivar x11
 desactivar_x11() {
-    sudo sed -i '/X11Forwarding/ c\X11Forwarding no' "$ssh_config"
+    sudo sed -i '/X11Forwarding/ c\     X11Forwarding no' "$ssh_config"
     sudo service ssh restart
     echo ""
     echo -e "${verde} Reenvío (forwarding) del entorno gráfico${borra_colores} DESACTIVADO."
-    echo ""; sleep 1
+    echo ""; sleep 2
     return
 }
 
