@@ -433,12 +433,12 @@ ssh_config="/etc/ssh/sshd_config"
 # Menú de opciones
 while :
 do
+clear
 menu_info
 
 # Ruta al archivo de configuración de SSH
 ssh_config="/etc/ssh/sshd_config"
 
-clear
 echo ""
 check_ssh_status
 
