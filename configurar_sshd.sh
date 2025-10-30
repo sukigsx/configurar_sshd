@@ -202,22 +202,47 @@ desactivar_password() {
 
 # Función para activar x11
 activar_x11() {
-    sudo sed -i '/X11Forwarding/ c\     X11Forwarding yes' "$ssh_config"
+    sudo sed -i '/X11Forwarding/ c\        X11Forwarding yes' "$ssh_config"
     sudo service ssh restart
     echo ""
     echo -e "${verde} Reenvío (forwarding) del entorno gráfico${borra_colores} ACTIVADO."
-    echo ""; sleep 2
-    return
+
+    # Reiniciar el servicio SSH
+    echo ""
+    echo -e "${azul} Reiniciando el servicio SSH...${borra_colores}"; sleep 2
+    sudo systemctl restart sshd
+
+    # Verificar si el servicio se reinició correctamente
+    if systemctl is-active --quiet sshd; then
+        echo ""
+        echo -e "${verde} El servidor SSH ahora escucha en el puerto${borra_colores} $nuevo_puerto."; sleep 1
+    else
+        echo ""
+        echo -e "${rojo} Error al reiniciar el servicio SSH. Revisa la configuración manualmente.${borra_colores}"; sleep 2
+        return
+    fi
 }
 
 # Función para desactivar x11
 desactivar_x11() {
-    sudo sed -i '/X11Forwarding/ c\     X11Forwarding no' "$ssh_config"
+    sudo sed -i '/X11Forwarding/ c\        X11Forwarding no' "$ssh_config"
     sudo service ssh restart
     echo ""
     echo -e "${verde} Reenvío (forwarding) del entorno gráfico${borra_colores} DESACTIVADO."
-    echo ""; sleep 2
-    return
+    # Reiniciar el servicio SSH
+    echo ""
+    echo -e "${azul} Reiniciando el servicio SSH...${borra_colores}"; sleep 2
+    sudo systemctl restart sshd
+
+    # Verificar si el servicio se reinició correctamente
+    if systemctl is-active --quiet sshd; then
+        echo ""
+        echo -e "${verde} El servidor SSH ahora escucha en el puerto${borra_colores} $nuevo_puerto."; sleep 1
+    else
+        echo ""
+        echo -e "${rojo} Error al reiniciar el servicio SSH. Revisa la configuración manualmente.${borra_colores}"; sleep 2
+        return
+    fi
 }
 
 #funcion cambiar puerto de escucha
