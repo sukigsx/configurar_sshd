@@ -143,7 +143,7 @@ check_ssh_status() {
 
     # 5️⃣ Verificar si el puerto está escuchando
     if ss -tlnp 2>/dev/null | grep -q ":$ssh_port "; then
-        echo -e " - l puerto${verde} $ssh_port ${borra_colores}está escuchando conexiones SSH"
+        echo -e " - El puerto${verde} $ssh_port ${borra_colores}está escuchando conexiones SSH"
     else
         echo -e "${amarillo} - El puerto${borra_colores} $ssh_port ${amarillo}no está escuchando (el servicio puede estar detenido o bloqueado por firewall)${borra_colores}"
     fi
@@ -196,7 +196,7 @@ read -p " Introduce el nuevo puerto SSH (1024-65535): " nuevo_puerto
 # Validar que sea un número válido
 if ! [[ "$nuevo_puerto" =~ ^[0-9]+$ ]] || [ "$nuevo_puerto" -lt 1024 ] || [ "$nuevo_puerto" -gt 65535 ]; then
   echo -e "${rojo} Puerto inválido. Debe ser un número entre 1024 y 65535.${borra_colores}"; sleep 2
-  break
+  continue
 fi
 
 # Ruta del archivo de configuración de SSH
