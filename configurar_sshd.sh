@@ -196,7 +196,7 @@ read -p " Introduce el nuevo puerto SSH (1024-65535): " nuevo_puerto
 # Validar que sea un número válido
 if ! [[ "$nuevo_puerto" =~ ^[0-9]+$ ]] || [ "$nuevo_puerto" -lt 1024 ] || [ "$nuevo_puerto" -gt 65535 ]; then
   echo -e "${rojo} Puerto inválido. Debe ser un número entre 1024 y 65535.${borra_colores}"; sleep 2
-  continue
+  return
 fi
 
 # Ruta del archivo de configuración de SSH
