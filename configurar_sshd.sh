@@ -191,10 +191,12 @@ desactivar_password() {
 #funcion cambiar puerto de escucha
 cambiar_puerto_escucha(){
 # Pedir el nuevo puerto
-read -p " Introduce el nuevo puerto SSH (1024-65535): " nuevo_puerto
+echo ""
+read -p " Introduce el nuevo puerto SSH (1-65535): " nuevo_puerto
 
 # Validar que sea un número válido
 if ! [[ "$nuevo_puerto" =~ ^[0-9]+$ ]] || [ "$nuevo_puerto" -lt 1024 ] || [ "$nuevo_puerto" -gt 65535 ]; then
+  echo ""
   echo -e "${rojo} Puerto inválido. Debe ser un número entre 1024 y 65535.${borra_colores}"; sleep 2
   return
 fi
@@ -206,21 +208,26 @@ conf="/etc/ssh/sshd_config"
 if grep -q "^#\?Port " "$conf"; then
   sed -i "s/^#\?Port .*/Port $nuevo_puerto/" "$conf"
 else
+  echo ""
   echo "Port $nuevo_puerto" >> "$conf"
 fi
 
+echo ""
 echo -e "${verde} Puerto SSH cambiado a${borra_colores} $nuevo_puerto ${verde}en${borra_colores} $conf"; sleep 2
 
 # Reiniciar el servicio SSH
+echo ""
 echo -e "${azul} Reiniciando el servicio SSH...${borra_colores}"; sleep 2
 systemctl restart sshd
 
 # Verificar si el servicio se reinició correctamente
 if systemctl is-active --quiet sshd; then
+  echo ""
   echo -e "${verde} El servidor SSH ahora escucha en el puerto${borra_colores} $nuevo_puerto."; sleep 2
 else
+  echo ""
   echo -e "${rojo} Error al reiniciar el servicio SSH. Revisa la configuración manualmente.${borra_colores}"; sleep 2
-  break
+  return
 fi
 
 }
@@ -252,7 +259,6 @@ echo ""
 check_ssh_status
 echo -e "${azul}  1. ${borra_colores}Activar la autenticación por contraseña."
 echo -e "${azul}  2. ${borra_colores}Desactivar la autenticación por contraseña."
-echo ""
 echo -e "${azul}  3. ${borra_colores}Editar el fichero de configuracion."
 echo -e "${azul}  4. ${borra_colores}Cambiar puerto de escucha del ssh."
 echo -e "${azul}  5. ${borra_colores}Opcion vacia de momento."
