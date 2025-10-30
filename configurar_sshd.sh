@@ -143,7 +143,7 @@ check_ssh_status() {
 
     # 5️⃣ Verificar si el puerto está escuchando
     if ss -tlnp 2>/dev/null | grep -q ":$ssh_port "; then
-        echo -e " -El puerto${verde} $ssh_port ${borra_colores}está escuchando conexiones SSH"
+        echo -e " - l puerto${verde} $ssh_port ${borra_colores}está escuchando conexiones SSH"
     else
         echo -e "${amarillo} - El puerto${borra_colores} $ssh_port ${amarillo}no está escuchando (el servicio puede estar detenido o bloqueado por firewall)${borra_colores}"
     fi
@@ -188,6 +188,45 @@ desactivar_password() {
     exit
 }
 
+#funcion cambiar puerto de escucha
+cambiar_puerto_escucha(){
+# Pedir el nuevo puerto
+read -p " Introduce el nuevo puerto SSH (1024-65535): " nuevo_puerto
+
+# Validar que sea un número válido
+if ! [[ "$nuevo_puerto" =~ ^[0-9]+$ ]] || [ "$nuevo_puerto" -lt 1024 ] || [ "$nuevo_puerto" -gt 65535 ]; then
+  echo -e "${rojo} Puerto inválido. Debe ser un número entre 1024 y 65535.${borra_colores}"; sleep 2
+  break
+fi
+
+# Ruta del archivo de configuración de SSH
+conf="/etc/ssh/sshd_config"
+
+# Si ya existe una línea 'Port', reemplazarla; si no, añadir al final
+if grep -q "^#\?Port " "$conf"; then
+  sed -i "s/^#\?Port .*/Port $nuevo_puerto/" "$conf"
+else
+  echo "Port $nuevo_puerto" >> "$conf"
+fi
+
+echo -e "${verde} Puerto SSH cambiado a${borra_colores} $nuevo_puerto ${verde}en${borra_colores} $conf"; sleep 2
+
+# Reiniciar el servicio SSH
+echo -e "${azul} Reiniciando el servicio SSH...${borra_colores}"; sleep 2
+systemctl restart sshd
+
+# Verificar si el servicio se reinició correctamente
+if systemctl is-active --quiet sshd; then
+  echo -e "${verde} El servidor SSH ahora escucha en el puerto${borra_colores} $nuevo_puerto."; sleep 2
+else
+  echo -e "${rojo} Error al reiniciar el servicio SSH. Revisa la configuración manualmente.${borra_colores}"; sleep 2
+  break
+fi
+
+}
+
+
+
 # Ruta al archivo de configuración de SSH
 ssh_config="/etc/ssh/sshd_config"
 
@@ -211,16 +250,16 @@ echo ""
 echo -e "${verde} Configurado =${borra_colores} $configurar${verde}. Conexion a internet =${borra_colores} $conexion${verde}. Software necesario =${borra_colores} $software${verde}. Script actualizado =${borra_colores} $actualizado."
 echo ""
 check_ssh_status
-echo -e "${azul}  1. Activar la autenticación por contraseña.${borra_colores}"
-echo -e "${azul}  2. Desactivar la autenticación por contraseña.${borra_colores}"
+echo -e "${azul}  1. ${borra_colores}Activar la autenticación por contraseña."
+echo -e "${azul}  2. ${borra_colores}Desactivar la autenticación por contraseña."
 echo ""
-echo -e "${azul}  3. Opcion vacia de momentoooooooo.${borra_colores}"
-echo -e "${azul}  4. Opcion vacia de momento.${borra_colores}"
-echo -e "${azul}  5. Opcion vacia de momento.${borra_colores}"
-echo -e "${azul}  6. Opcion vacia de momento.${borra_colores}"
-echo -e "${azul}  7. Opcion vacia de momento.${borra_colores}"
+echo -e "${azul}  3. ${borra_colores}Editar el fichero de configuracion."
+echo -e "${azul}  4. ${borra_colores}Cambiar puerto de escucha del ssh."
+echo -e "${azul}  5. ${borra_colores}Opcion vacia de momento."
+echo -e "${azul}  6. ${borra_colores}Opcion vacia de momento."
+echo -e "${azul}  7. ${borra_colores}Opcion vacia de momento."
 echo ""
-echo -e "${azul} 99. Salir.${borra_colores}"
+echo -e "${azul} 99. ${borra_colores}Salir."
 echo ""
 
 read -p " Seleciona opcion del menu -> " opcion
@@ -233,6 +272,13 @@ case $opcion in
         desactivar_password
         ;;
     
+    3)
+        sudo nano $ssh_config
+        ;;
+
+    4)
+        cambiar_puerto_escucha
+        ;;
    99)
         echo ""
 	exit;;
