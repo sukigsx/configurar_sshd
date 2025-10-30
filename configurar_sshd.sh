@@ -167,16 +167,6 @@ else
 fi
 sleep 2
 
-# Función para activar la autenticación por contraseña
-activar_password() {
-    sudo sed -i '/PasswordAuthentication/ c\PasswordAuthentication yes' "$ssh_config"
-    sudo service ssh restart
-    echo ""
-    echo -e "${verde} La autenticación por contraseña se ha activado.${borra_colores}"
-    echo "" 
-    exit
-}
-
 #toma el control al pulsar control + c
 trap ctrl_c INT
 function ctrl_c()
@@ -186,8 +176,18 @@ echo -e ""
 echo -e "${azul} GRACIAS POR UTILIZAR MI SCRIPT${borra_colores}"
 echo -e ""
 #wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
-sleep 2
+sleep 1
 exit
+}
+
+# Función para activar la autenticación por contraseña
+activar_password() {
+    sudo sed -i '/PasswordAuthentication/ c\PasswordAuthentication yes' "$ssh_config"
+    sudo service ssh restart
+    echo ""
+    echo -e "${verde} La autenticación por contraseña${borra_colores} ACTIVADO."
+    echo ""; sleep 1
+    return
 }
 
 # Función para desactivar la autenticación por contraseña
@@ -195,9 +195,29 @@ desactivar_password() {
     sudo sed -i '/PasswordAuthentication/ c\PasswordAuthentication no' "$ssh_config"
     sudo service ssh restart
     echo "" 
-    echo -e "${verde} La autenticación por contraseña se ha desactivado.${borra_colores}"
+    echo -e "${verde} La autenticación por contraseña${borra_colores} DESACTIVADO."
+    echo ""; sleep 1
+    return
+}
+
+# Función para activar x11
+activar_x11() {
+    sudo sed -i '/X11Forwarding/ c\X11Forwarding yes' "$ssh_config"
+    sudo service ssh restart
     echo ""
-    exit
+    echo -e "${verde} Reenvío (forwarding) del entorno gráfico${borra_colores} ACTIVADO."
+    echo ""; sleep 1
+    return
+}
+
+# Función para desactivar x11
+desactivar_x11() {
+    sudo sed -i '/X11Forwarding/ c\X11Forwarding no' "$ssh_config"
+    sudo service ssh restart
+    echo ""
+    echo -e "${verde} Reenvío (forwarding) del entorno gráfico${borra_colores} DESACTIVADO."
+    echo ""; sleep 1
+    return
 }
 
 #funcion cambiar puerto de escucha
@@ -225,7 +245,7 @@ else
 fi
 
 echo ""
-echo -e "${verde} Puerto SSH cambiado a${borra_colores} $nuevo_puerto ${verde}en${borra_colores} $conf"; sleep 2
+echo -e "${verde} Puerto SSH cambiado a${borra_colores} $nuevo_puerto ${verde}en${borra_colores} $conf"; sleep 1
 
 # Reiniciar el servicio SSH
 echo ""
@@ -235,7 +255,7 @@ sudo systemctl restart sshd
 # Verificar si el servicio se reinició correctamente
 if systemctl is-active --quiet sshd; then
   echo ""
-  echo -e "${verde} El servidor SSH ahora escucha en el puerto${borra_colores} $nuevo_puerto."; sleep 2
+  echo -e "${verde} El servidor SSH ahora escucha en el puerto${borra_colores} $nuevo_puerto."; sleep 1
 else
   echo ""
   echo -e "${rojo} Error al reiniciar el servicio SSH. Revisa la configuración manualmente.${borra_colores}"; sleep 2
@@ -276,8 +296,8 @@ echo -e "${azul}  1. ${borra_colores}Activar la autenticación por contraseña."
 echo -e "${azul}  2. ${borra_colores}Desactivar la autenticación por contraseña."
 echo -e "${azul}  3. ${borra_colores}Editar el fichero de configuracion."
 echo -e "${azul}  4. ${borra_colores}Cambiar puerto de escucha del ssh."
-echo -e "${azul}  5. ${borra_colores}Opcion vacia de momento."
-echo -e "${azul}  6. ${borra_colores}Opcion vacia de momento."
+echo -e "${azul}  5. ${borra_colores}Activar reenvío (forwarding) del entorno gráfico."
+echo -e "${azul}  6. ${borra_colores}Desactivar reenvío (forwarding) del entorno gráfico"
 echo -e "${azul}  7. ${borra_colores}Opcion vacia de momento."
 echo ""
 echo -e "${azul} 99. ${borra_colores}Salir."
@@ -300,6 +320,15 @@ case $opcion in
     4)
         cambiar_puerto_escucha
         ;;
+
+    5)
+        activar_x11
+        ;;
+
+    6)
+        desactivar_x11
+        ;;
+
    99)
         echo ""
         ctrl_c;;
