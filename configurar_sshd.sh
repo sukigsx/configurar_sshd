@@ -178,6 +178,19 @@ activar_password() {
     exit
 }
 
+#toma el control al pulsar control + c
+trap ctrl_c INT
+function ctrl_c()
+{
+clear
+figlet -c Gracias por
+figlet -c utilizar mi
+figlet -c script
+wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
+sleep 2
+exit
+}
+
 # Función para desactivar la autenticación por contraseña
 desactivar_password() {
     sudo sed -i '/PasswordAuthentication/ c\PasswordAuthentication no' "$ssh_config"
@@ -287,12 +300,12 @@ case $opcion in
         ;;
    99)
         echo ""
-	exit;;
+        ctrl_c;;
 
     *)
         echo ""
-	echo -e "${rojo} Opción no válida. (Selecciona 1,2 o 99).${borra_colores}"
-	sleep 3
+        echo -e "${rojo} Opción no válida. (Selecciona 1,2 o 99).${borra_colores}"
+        sleep 3
         ;;
 esac
 done
