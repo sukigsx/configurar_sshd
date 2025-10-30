@@ -78,7 +78,7 @@ else
     rm -R /tmp/comprobar
     echo ""
     echo -e "${amarillo} El script se ha actualizado, es necesario cargarlo de nuevo.${borra_colores}"
-    echo -e ""
+    echo -e ""; sleep 2
     #read -p " Pulsa una tecla para continuar." pause
     exit
 fi
