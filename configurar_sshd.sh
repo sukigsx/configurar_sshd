@@ -100,7 +100,6 @@ fi
 # EMPIEZA LO GORDO
 check_ssh_status() {
     echo -e "${azul} Comprobando el estado del servidor SSH${borra_colores}"
-    echo ""
 
     # 1️⃣ Detectar nombre del servicio
     local service_name=""
@@ -270,6 +269,9 @@ echo ""
 echo -e "${verde} Configurado =${borra_colores} $configurar${verde}. Conexion a internet =${borra_colores} $conexion${verde}. Software necesario =${borra_colores} $software${verde}. Script actualizado =${borra_colores} $actualizado."
 echo ""
 check_ssh_status
+
+echo -e "${azul} --- MENU DE OPCIONES ---${borra_colores}"
+echo ""
 echo -e "${azul}  1. ${borra_colores}Activar la autenticación por contraseña."
 echo -e "${azul}  2. ${borra_colores}Desactivar la autenticación por contraseña."
 echo -e "${azul}  3. ${borra_colores}Editar el fichero de configuracion."
