@@ -110,21 +110,22 @@ check_ssh_status() {
         service_name="sshd"
     else
         echo -e "${rojo}No se encontró ningún servicio SSH registrado en systemd${borra_colores}"
+        echo ""
         return 2
     fi
 
     # 2️⃣ Comprobar si está en ejecución
     if systemctl is-active --quiet "$service_name"; then
-        echo -e "${verde}Ejecucion del servicio ${borra_colores}$service_name ${verde}SI${borra_colores}"
+        echo -e "}Ejecucion del servicio${azul} $service_name${verde} OK${borra_colores}"
     else
-        echo -e "${amarillo}Ejecucion del servicio${borra_colores} $service_name ${amarillo}NO${borra_colores}"
+        echo -e "Ejecucion del servicio${azul} $service_name ${amarillo}KO${borra_colores}"
     fi
 
     # 3️⃣ Comprobar si está habilitado al arranque
     if systemctl is-enabled --quiet "$service_name"; then
-        echo -e "${verde}Servicio habilitado en el arranque${borra_colores} $service_name ${verde}SI${borra_colores}"
+        echo -e "Servicio habilitado en el arranque${azul} $service_name ${verde}OK${borra_colores}"
     else
-        echo -e "${amarillo}Servicio habilitado en el arranque${borra_colores} $service_name ${amarillo}NO${borra_colores}"
+        echo -e "Servicio habilitado en el arranque${azul} $service_name ${amarillo}KO${borra_colores}"
     fi
 
     # 4️⃣ Detectar el puerto configurado (en /etc/ssh/sshd_config)
@@ -135,14 +136,14 @@ check_ssh_status() {
         if [ -z "$ssh_port" ]; then
             ssh_port=22
         fi
-        echo -e "${azul}El servidor SSH usa el puerto:${borra_colores} $ssh_port"
+        echo -e "El servidor SSH usa el puerto:${azul} $ssh_port${borra_colores}"
     else
         echo -e "${rojo}No se encontró el archivo de configuración${borra_colores} /etc/ssh/sshd_config"
     fi
 
     # 5️⃣ Verificar si el puerto está escuchando
     if ss -tlnp 2>/dev/null | grep -q ":$ssh_port "; then
-        echo -e "${verde}El puerto${borra_colores} $ssh_port ${verde}está escuchando conexiones SSH${borra_colores}"
+        echo -e "El puerto${verde} $ssh_port ${borra_colores}está escuchando conexiones SSH"
     else
         echo -e "${amarillo}El puerto${borra_colores} $ssh_port ${amarillo}no está escuchando (el servicio puede estar detenido o bloqueado por firewall)${borra_colores}"
     fi
