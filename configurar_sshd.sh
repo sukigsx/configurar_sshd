@@ -33,6 +33,7 @@ DireccionGithub="https://github.com/sukigsx/configurar_sshd" #contiene la direcc
         [git]="git"
         [diff]="diff"
         [ping]="ping"
+        [ssh]="ssh"
 )
 
 #colores
