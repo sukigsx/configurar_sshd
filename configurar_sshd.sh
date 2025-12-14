@@ -451,7 +451,8 @@ echo -e "${azul}  3. ${borra_colores}Editar el fichero de configuracion."
 echo -e "${azul}  4. ${borra_colores}Cambiar puerto de escucha del ssh."
 echo -e "${azul}  5. ${borra_colores}Activar reenvío (forwarding) del entorno gráfico."
 echo -e "${azul}  6. ${borra_colores}Desactivar reenvío (forwarding) del entorno gráfico"
-echo -e "${azul}  7. ${borra_colores}Opcion vacia de momento."
+echo -e "${azul}  7. ${borra_colores}Activar demonio del servidor ssh."
+echo -e "${azul}  8. ${borra_colores}Desactivar demonio del servidor ssh."
 echo ""
 echo -e "${azul} 99. ${borra_colores}Salir."
 echo ""
@@ -480,6 +481,16 @@ case $opcion in
 
     6)
         desactivar_x11
+        ;;
+
+    7)
+        sudo systemctl enable sshd
+        echo ""; echo -e "${verde} Demonio servidor ssh activado.${borra_colores}"; sleep 2
+        ;;
+
+    8)
+        sudo systemctl disable sshd
+        echo ""; echo -e "${verde} Demonio servidor ssh desactivado.${borra_colores}"; sleep 2
         ;;
 
    99)
