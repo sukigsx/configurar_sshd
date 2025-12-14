@@ -484,12 +484,12 @@ case $opcion in
         ;;
 
     7)
-        sudo systemctl enable sshd
+        sudo systemctl enable ssh
         echo ""; echo -e "${verde} Demonio servidor ssh activado.${borra_colores}"; sleep 2
         ;;
 
     8)
-        sudo systemctl disable sshd
+        sudo systemctl disable ssh
         echo ""; echo -e "${verde} Demonio servidor ssh desactivado.${borra_colores}"; sleep 2
         ;;
 
