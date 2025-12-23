@@ -232,41 +232,6 @@ else
     fi
 fi
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # EMPIEZA LO GORDO
 check_ssh_status() {
     echo -e "${azul} Comprobando el estado del servidor SSH${borra_colores}"
@@ -453,6 +418,8 @@ echo -e "${azul}  5. ${borra_colores}Activar reenvío (forwarding) del entorno g
 echo -e "${azul}  6. ${borra_colores}Desactivar reenvío (forwarding) del entorno gráfico"
 echo -e "${azul}  7. ${borra_colores}Activar demonio del servidor ssh."
 echo -e "${azul}  8. ${borra_colores}Desactivar demonio del servidor ssh."
+echo -e "${azul}  9. ${borra_colores}Activar servidor ssh."
+echo -e "${azul} 10. ${borra_colores}Desactivar servidor ssh."
 echo ""
 echo -e "${azul} 99. ${borra_colores}Salir."
 echo ""
@@ -491,6 +458,15 @@ case $opcion in
     8)
         sudo systemctl disable ssh
         echo ""; echo -e "${verde} Demonio servidor ssh desactivado.${borra_colores}"; sleep 2
+        ;;
+
+    9)
+        sudo systemctl start ssh
+        echo ""; echo -e "${verde} Activado el servidor ssh.${borra_colores}"; sleep 2
+        ;;
+   10)
+        sudo systemctl stop ssh
+        echo ""; echo -e "${verde} Desactivado el servidor ssh.${borra_colores}"; sleep 2
         ;;
 
    99)
