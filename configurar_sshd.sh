@@ -410,16 +410,16 @@ check_ssh_status
 
 echo -e "${azul} --- MENU DE OPCIONES ---${borra_colores}"
 echo ""
-echo -e "${azul}  1. ${borra_colores}Activar la autenticación por contraseña."
-echo -e "${azul}  2. ${borra_colores}Desactivar la autenticación por contraseña."
+echo -e "${azul}  1. ${verde}Activar${borra_colores} la autenticación por contraseña."
+echo -e "${azul}  2. ${amarillo}Desactivar${borra_colores} la autenticación por contraseña."
 echo -e "${azul}  3. ${borra_colores}Editar el fichero de configuracion."
 echo -e "${azul}  4. ${borra_colores}Cambiar puerto de escucha del ssh."
-echo -e "${azul}  5. ${borra_colores}Activar reenvío (forwarding) del entorno gráfico."
-echo -e "${azul}  6. ${borra_colores}Desactivar reenvío (forwarding) del entorno gráfico"
-echo -e "${azul}  7. ${borra_colores}Activar demonio del servidor ssh."
-echo -e "${azul}  8. ${borra_colores}Desactivar demonio del servidor ssh."
-echo -e "${azul}  9. ${borra_colores}Activar servidor ssh."
-echo -e "${azul} 10. ${borra_colores}Desactivar servidor ssh."
+echo -e "${azul}  5. ${verde}Activar${borra_colores} reenvío (forwarding) del entorno gráfico."
+echo -e "${azul}  6. ${amarillo}Desactivar${borra_colores} reenvío (forwarding) del entorno gráfico"
+echo -e "${azul}  7. ${verde}Activar${borra_colores} demonio del servidor ssh."
+echo -e "${azul}  8. ${amarillo}Desactivar${borra_colores} demonio del servidor ssh."
+echo -e "${azul}  9. ${verde}Activar${borra_colores} servidor ssh."
+echo -e "${azul} 10. ${amarillo}Desactivar${borra_colores} servidor ssh."
 echo ""
 echo -e "${azul} 99. ${borra_colores}Salir."
 echo ""
@@ -451,21 +451,21 @@ case $opcion in
         ;;
 
     7)
-        sudo systemctl enable ssh
+        sudo systemctl enable ssh > /dev/null 2>&1
         echo ""; echo -e "${verde} Demonio servidor ssh activado.${borra_colores}"; sleep 2
         ;;
 
     8)
-        sudo systemctl disable ssh
+        sudo systemctl disable ssh > /dev/null 2>&1
         echo ""; echo -e "${verde} Demonio servidor ssh desactivado.${borra_colores}"; sleep 2
         ;;
 
     9)
-        sudo systemctl start ssh
+        sudo systemctl start ssh > /dev/null 2>&1
         echo ""; echo -e "${verde} Activado el servidor ssh.${borra_colores}"; sleep 2
         ;;
    10)
-        sudo systemctl stop ssh
+        sudo systemctl stop ssh > /dev/null 2>&1
         echo ""; echo -e "${verde} Desactivado el servidor ssh.${borra_colores}"; sleep 2
         ;;
 
