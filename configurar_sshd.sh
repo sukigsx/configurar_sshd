@@ -186,8 +186,8 @@ check_root() {
     #clear
     #menu_info
   if [ "$EUID" -ne 0 ]; then
-    #echo ""
-    #echo -e "${amarillo} Se necesita privilegios de root ingresa la contraseña.${borra_colores}"
+    echo ""
+    echo -e "${amarillo} Se necesita privilegios de root ingresa la contraseña.${borra_colores}"
 
     # Pedir contraseña para sudo
     #echo -e ""
@@ -303,7 +303,6 @@ fi
 clear
 menu_info
 conexion
-check_root
 if [ $conexion = "SI" ]; then
     comprobar_actualizaciones
     if [ $actualizado = "SI" ]; then
@@ -505,7 +504,7 @@ fi
 
 # Ruta al archivo de configuración de SSH
 ssh_config="/etc/ssh/sshd_config"
-
+check_root
 # Menú de opciones
 while :
 do
