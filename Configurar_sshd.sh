@@ -19,9 +19,9 @@ ruta_ejecucion=$(dirname "$(readlink -f "$0")") #es la ruta de ejecucion del scr
 ruta_escritorio=$(xdg-user-dir DESKTOP) #es la ruta de tu escritorio sin la / al final
 
 # VARIABLES PARA LA ACTUALIZAION CON GITHUB
-NombreScriptActualizar="principal.sh" #contiene el nombre del script para poder actualizar desde github
-DireccionGithub="https://github.com/sukigsx/pruebas.git" #contiene la direccion de github para actualizar el script
-nombre_carpeta_repositorio="pruebas" #poner el nombre de la carpeta cuando se clona el repo para poder eliminarla
+NombreScriptActualizar="Configurar_sshd.sh" #contiene el nombre del script para poder actualizar desde github
+DireccionGithub="https://github.com/sukigsx/configurar_sshd" #contiene la direccion de github para actualizar el script
+nombre_carpeta_repositorio="Configurar_sshd.sh" #poner el nombre de la carpeta cuando se clona el repo para poder eliminarla
 
 #VARIABLES DE SOFTWARE NECESARIO
 # Asociamos comandos con el paquete que los contiene [comando a comprobar]="paquete a instalar"
@@ -35,13 +35,11 @@ nombre_carpeta_repositorio="pruebas" #poner el nombre de la carpeta cuando se cl
         [xdg-user-dir]="xdg-user-dirs"
 
         #requeridos para el script en si
-        #[fzf]="fzf"
-        #[curl]="curl"
-        #[grep]="grep"
-        #[jq]="jq"
-        #[sed]="sed"
-        #[wget]="wget"
-        #[nano]="nano"
+        [ssh]="ssh"
+        [nano]="nano"
+        [which]="which"
+        [systemd]="systemctl"
+        [ssh]="ssh"
     )
 ###########################
 ## FUNCIONES PRINCIPALES ##
