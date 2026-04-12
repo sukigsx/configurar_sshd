@@ -439,7 +439,7 @@ comprobar_estados(){
     if systemctl list-units --type=service | grep -qE 'ssh\.service'; then
         servicio_ssh="ON ssh"
     elif systemctl list-units --type=service | grep -qE 'sshd\.service'; then
-        servicio_ssj="ON sshd"
+        servicio_ssh="ON sshd"
     else
         servicio_ssh "No activo SSH"
         return 1
