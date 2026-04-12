@@ -40,6 +40,7 @@ nombre_carpeta_repositorio="Configurar_sshd.sh" #poner el nombre de la carpeta c
         [which]="which"
         [systemctl]="systemd"
         [ssh]="ssh"
+        [sed]="sed"
     )
 ###########################
 ## FUNCIONES PRINCIPALES ##
@@ -393,26 +394,6 @@ check_ssh_status() {
 }
 
 
-# Función para activar la autenticación por contraseña
-activar_password() {
-    sudo sed -i '/PasswordAuthentication/ c\PasswordAuthentication yes' "$ssh_config"
-    sudo service ssh restart
-    echo ""
-    echo -e "${verde} La autenticación por contraseña${borra_colores} ACTIVADO."
-    echo ""; sleep 1
-    return
-}
-
-# Función para desactivar la autenticación por contraseña
-desactivar_password() {
-    sudo sed -i '/PasswordAuthentication/ c\PasswordAuthentication no' "$ssh_config"
-    sudo service ssh restart
-    echo "" 
-    echo -e "${verde} La autenticación por contraseña${borra_colores} DESACTIVADO."
-    echo ""; sleep 1
-    return
-}
-
 # Función para activar x11
 activar_x11() {
     sudo sed -i '/X11Forwarding/ c\        X11Forwarding yes' "$ssh_config"
@@ -505,16 +486,16 @@ comprobar_estados(){
     # Obtener estado actual
     estado_actual=$(grep -Ei '^\s*#?\s*PasswordAuthentication' "$ssh_config" | tail -n1)
 
-    if echo "$estado_actual" | grep -qi "yes"; then
-        # Está activado → desactivar
-        estado_password="Activado"
-    else
-        # Está desactivado → activar
-        estado_password="Desactivado"
-    fi
+   #if echo "$estado_actual" | grep -qi "yes"; then
+   #     # Está activado → desactivar
+   #3     estado_password="Activado"
+   # else
+   #     # Está desactivado → activar
+   #     estado_password="Desactivado"
+   # fi
 }
 
-toggle_password() {
+activar_desactivar_password() {
     # Obtener estado actual
     estado_actual=$(grep -Ei '^\s*#?\s*PasswordAuthentication' "$ssh_config" | tail -n1)
 
@@ -559,7 +540,7 @@ check_ssh_status
 comprobar_estados
 echo -e "${azul} --- MENU DE OPCIONES ---${borra_colores}"
 echo ""
-echo -e "${azul}  1. ${verde}Activar/desactivar${borra_colores} la autenticación por contraseña. Estadoa actual [ $estado_actual ]"
+echo -e "${azul}  1. ${verde}Activar/desactivar${borra_colores} la autenticación por contraseña. Estado = [ $estado_actual ]"
 echo -e "${azul}  2. ${amarillo}Desactivar${borra_colores} la autenticación por contraseña."
 echo -e "${azul}  3. ${borra_colores}Editar el fichero de configuracion."
 echo -e "${azul}  4. ${borra_colores}Cambiar puerto de escucha del ssh."
@@ -577,7 +558,7 @@ read -p " Seleciona opcion del menu -> " opcion
 
 case $opcion in
     1)
-        toggle_password
+        activar_desactivar_password
         ;;
     2)
         desactivar_password
