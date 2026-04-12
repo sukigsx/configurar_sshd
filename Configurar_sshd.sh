@@ -577,7 +577,7 @@ read -p " Seleciona opcion del menu -> " opcion
 
 case $opcion in
     1)
-        activar_password
+        toggle_password
         ;;
     2)
         desactivar_password
