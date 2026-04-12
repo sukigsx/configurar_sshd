@@ -437,11 +437,11 @@ comprobar_estados(){
 
     # Detectar nombre del servicio
     if systemctl list-units --type=service | grep -qE 'ssh\.service'; then
-        servicio_ssh="ON ssh"
+        servicio_ssh="Activado"
     elif systemctl list-units --type=service | grep -qE 'sshd\.service'; then
-        servicio_ssh="ON sshd"
+        servicio_ssh="Activado"
     else
-        servicio_ssh "No activo SSH"
+        servicio_ssh "Desactivado"
         return 1
     fi
 
@@ -454,25 +454,13 @@ activar_desactivar_password() {
     if echo "$estado_actual" | grep -qi "yes"; then
         # Está activado → desactivar
         sudo sed -i 's/^#\?\s*PasswordAuthentication.*/PasswordAuthentication no/' "$ssh_config"
-        sudo service ssh restart
-        PASSWORD_STATE="OFF"
-
-        echo ""
-        echo -e "${verde}La autenticación por contraseña${borra_colores} DESACTIVADA."
+        sudo systemctl restart ssh
     else
         # Está desactivado → activar
         sudo sed -i 's/^#\?\s*PasswordAuthentication.*/PasswordAuthentication yes/' "$ssh_config"
-        sudo service ssh restart
-        PASSWORD_STATE="ON"
-
-        echo ""
-        echo -e "${verde}La autenticación por contraseña${borra_colores} ACTIVADA."
+        sudo systemctl restart ssh
     fi
 }
-
-
-
-
 
 # Ruta al archivo de configuración de SSH
 ssh_config="/etc/ssh/sshd_config"
@@ -491,20 +479,12 @@ echo ""
 comprobar_estados
 echo -e "${azul} --- MENU DE OPCIONES ---${borra_colores}"
 echo ""
-echo -e "${azul} 1. ${amarillo}Activar/Desactivar${borra_colores} servidor ssh. Estado = [ $servicio_ssh ]"
-
-
-
-echo -e "${azul}  1. ${verde}Activar/desactivar${borra_colores} la autenticación por contraseña. Estado = [ $estado_actual ]"
-
-echo -e "${azul}  3. ${borra_colores}Editar el fichero de configuracion."
-echo -e "${azul}  4. ${borra_colores}Cambiar puerto de escucha del ssh."
-echo -e "${azul}  5. ${verde}Activar${borra_colores} reenvío (forwarding) del entorno gráfico."
-echo -e "${azul}  6. ${amarillo}Desactivar${borra_colores} reenvío (forwarding) del entorno gráfico"
-echo -e "${azul}  7. ${verde}Activar${borra_colores} demonio del servidor ssh."
-echo -e "${azul}  8. ${amarillo}Desactivar${borra_colores} demonio del servidor ssh."
-echo -e "${azul}  9. ${verde}Activar${borra_colores} servidor ssh."
-echo -e "${azul} 10. ${amarillo}Desactivar${borra_colores} servidor ssh."
+echo -e "${azul}  1. ${amarillo}Activar/Desactivar${borra_colores} servidor ssh. Estado = [${verde} $servicio_ssh ${borra_colores}]"
+echo -e "${azul}  2. ${verde}Activar/Desactivar${borra_colores} demonio del servidor ssh."
+echo -e "${azul}  3. ${borra_colores}Cambiar puerto de escucha del ssh."
+echo -e "${azul}  4. ${amarillo}Activar/Desactivar${borra_colores} reenvío (forwarding) del entorno gráfico"
+echo -e "${azul}  5. ${verde}Activar/desactivar${borra_colores} la autenticación por contraseña. Estado = [ $estado_actual ]"
+echo -e "${azul}  6. ${borra_colores}Editar el fichero de configuracion."
 echo ""
 echo -e "${azul} 99. ${borra_colores}Salir."
 echo ""
@@ -512,27 +492,29 @@ echo ""
 read -p " Seleciona opcion del menu -> " opcion
 
 case $opcion in
-    1)
+    1)  #Activar/Desactivarvservidor ssh.
         activar_desactivar_password
         ;;
-    2)
-        desactivar_password
+    2)  #Activar/Desactivar demonio del servidor ssh
+
         ;;
     
-    3)
-        sudo nano $ssh_config
-        ;;
-
-    4)
+    3)  #cambiar puerto de escucha
         cambiar_puerto_escucha
+
         ;;
 
-    5)
-        activar_x11
+    4)  #Activar/Desactivar reenvío (forwarding) del entorno gráfico
+
         ;;
 
-    6)
-        desactivar_x11
+    5)  #Activar/desactivar la autenticación por contraseña.
+        activar_desactivar_password
+        ;;
+
+    6)  #editar fichero configuracion
+        sudo nano $ssh_config
+        #desactivar_x11
         ;;
 
     7)
