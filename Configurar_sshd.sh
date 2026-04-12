@@ -431,7 +431,6 @@ fi
 }
 
 comprobar_estados(){
-    check_ssh() {
     # Detectar nombre del servicio
     if systemctl list-units --type=service | grep -qE 'ssh\.service'; then
         servicio="ssh"
@@ -455,8 +454,6 @@ comprobar_estados(){
 
     # Estado de PasswordAuthentication
     estado_password=$(grep -Ei '^\s*#?\s*PasswordAuthentication' "$ssh_config" | tail -n1)
-
-}
 }
 
 activar_desactivar_password() {
@@ -491,7 +488,7 @@ echo ""
 comprobar_estados
 echo -e "${azul} --- MENU DE OPCIONES ---${borra_colores}"
 echo ""
-echo -e "${azul}  1. ${borra_colores}Activar/Desactivar servidor ssh. Estado = [${verde} $servicio_ssh ${borra_colores}]"
+echo -e "${azul}  1. ${borra_colores}Activar/Desactivar servidor ssh. Estado = [${verde} $servicio ${borra_colores}]"
 echo -e "${azul}  2. ${borra_colores}Activar/Desactivar demonio del servidor ssh. Estado = [ $estado ]"
 echo -e "${azul}  3. ${borra_colores}Cambiar puerto de escucha del ssh. Estado = [${verde} $puerto ${borra_colores}]"
 echo -e "${azul}  4. ${borra_colores}Activar/Desactivar reenvío (forwarding) del entorno gráfico"
