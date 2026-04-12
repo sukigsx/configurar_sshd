@@ -467,6 +467,18 @@ activar_desactivar_password() {
     fi
 }
 
+# ssh enable o disable
+ssh_enable_disable(){
+    if systemctl is-enabled --quiet "$servicio"; then
+        sudo systemctl disable "$servicio"
+        ssh_enabledisable="Avtivado"
+    else
+        sudo systemctl enable "$servicio"
+        ssh_enabledisable="Desactivado"
+    fi
+    sudo systemctl restar $servicio
+}
+
 # Ruta al archivo de configuración de SSH
 ssh_config="/etc/ssh/sshd_config"
 check_root
@@ -485,7 +497,7 @@ comprobar_estados
 echo -e "${azul} --- MENU DE OPCIONES ---${borra_colores}"
 echo ""
 echo -e "${azul}  1. ${borra_colores}Activar/Desactivar servidor ssh. Estado = [${verde} $servicio ${borra_colores}]"
-echo -e "${azul}  2. ${borra_colores}Activar/Desactivar demonio del servidor ssh. Estado = [ $estado ]"
+echo -e "${azul}  2. ${borra_colores}Activar/Desactivar demonio del servidor ssh. Estado = [${verde} $estado ${borra_colores}]"
 echo -e "${azul}  3. ${borra_colores}Cambiar puerto de escucha del ssh. Estado = [${verde} $puerto ${borra_colores}]"
 echo -e "${azul}  4. ${borra_colores}Activar/Desactivar reenvío (forwarding) del entorno gráfico"
 echo -e "${azul}  5. ${borra_colores}Activar/desactivar la autenticación por contraseña. Estado = [${verde} $estado_password ${borra_colores}]"
@@ -501,7 +513,7 @@ case $opcion in
         ssh_onoff
         ;;
     2)  #Activar/Desactivar demonio del servidor ssh
-
+        ssh_enable_disable
         ;;
     
     3)  #cambiar puerto de escucha
