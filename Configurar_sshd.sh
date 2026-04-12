@@ -496,7 +496,7 @@ echo -e "${azul}  2. ${borra_colores}Activar/Desactivar demonio del servidor ssh
 echo -e "${azul}  3. ${borra_colores}Cambiar puerto de escucha del ssh. Estado = [${verde} $servicio_ssh_puerto ${borra_colores}]"
 echo -e "${azul}  4. ${borra_colores}Activar/Desactivar reenvío (forwarding) del entorno gráfico"
 echo -e "${azul}  5. ${borra_colores}Activar/desactivar la autenticación por contraseña. Estado = [${verde} $estado_actual ${borra_colores}]"
-echo -e "${azul}  6. ${borra_coloresÇEditar el fichero de configuracion."
+echo -e "${azul}  6. ${borra_colores}Editar el fichero de configuracion."
 echo ""
 echo -e "${azul} 99. ${borra_colores}Salir."
 echo ""
