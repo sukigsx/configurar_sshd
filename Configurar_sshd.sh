@@ -431,32 +431,32 @@ fi
 }
 
 comprobar_estados(){
-    #estado del PasswordAuthentication
-    # Obtener estado actual
-    estado_actual=$(grep -Ei '^\s*#?\s*PasswordAuthentication' "$ssh_config" | tail -n1)
-
+    check_ssh() {
     # Detectar nombre del servicio
     if systemctl list-units --type=service | grep -qE 'ssh\.service'; then
-        servicio_ssh="Activado"
+        servicio="ssh"
     elif systemctl list-units --type=service | grep -qE 'sshd\.service'; then
-        servicio_ssh="Activado"
+        servicio="sshd"
     else
-        servicio_ssh "Desactivado"
+        servicio="Desactivado"
         return 1
     fi
 
-    #detectar el puerto de ssh
+    # Estado del servicio
+    if systemctl is-active --quiet "$servicio"; then
+        estado="Demonio ACTIVO"
+    else
+        estado="Demonio INACTIVO"
+    fi
+
     # Puerto configurado
-    servicio_ssh_puerto=$(grep -Ei '^\s*Port ' "$ssh_config" | awk '{print $2}' | tail -n1)
-    servicio_ssh_puerto=${puerto:-22}
+    puerto=$(grep -Ei '^\s*Port ' "$ssh_config" | awk '{print $2}' | tail -n1)
+    puerto=${puerto:-22}
 
+    # Estado de PasswordAuthentication
+    estado_password=$(grep -Ei '^\s*#?\s*PasswordAuthentication' "$ssh_config" | tail -n1)
 
-    # Ver si realmente está escuchando
-    #if ss -tlnp | grep -q ":$puerto"; then
-    #    echo "Escuchando en el puerto: $puerto"
-    #else
-    #    echo "No está escuchando en el puerto configurado"
-    #fi
+}
 }
 
 activar_desactivar_password() {
@@ -492,10 +492,10 @@ comprobar_estados
 echo -e "${azul} --- MENU DE OPCIONES ---${borra_colores}"
 echo ""
 echo -e "${azul}  1. ${borra_colores}Activar/Desactivar servidor ssh. Estado = [${verde} $servicio_ssh ${borra_colores}]"
-echo -e "${azul}  2. ${borra_colores}Activar/Desactivar demonio del servidor ssh."
-echo -e "${azul}  3. ${borra_colores}Cambiar puerto de escucha del ssh. Estado = [${verde} $servicio_ssh_puerto ${borra_colores}]"
+echo -e "${azul}  2. ${borra_colores}Activar/Desactivar demonio del servidor ssh. Estado = [ $estado ]"
+echo -e "${azul}  3. ${borra_colores}Cambiar puerto de escucha del ssh. Estado = [${verde} $puerto ${borra_colores}]"
 echo -e "${azul}  4. ${borra_colores}Activar/Desactivar reenvío (forwarding) del entorno gráfico"
-echo -e "${azul}  5. ${borra_colores}Activar/desactivar la autenticación por contraseña. Estado = [${verde} $estado_actual ${borra_colores}]"
+echo -e "${azul}  5. ${borra_colores}Activar/desactivar la autenticación por contraseña. Estado = [${verde} $estado_password ${borra_colores}]"
 echo -e "${azul}  6. ${borra_colores}Editar el fichero de configuracion."
 echo ""
 echo -e "${azul} 99. ${borra_colores}Salir."
