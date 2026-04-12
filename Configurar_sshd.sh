@@ -341,57 +341,6 @@ fi
 
 
 # EMPIEZA LO GORDO
-check_ssh_status() {
-    echo -e "${azul} Comprobando el estado del servidor SSH${borra_colores}"
-
-    # 1️⃣ Detectar nombre del servicio
-    local service_name=""
-    if systemctl list-unit-files | grep -q '^ssh\.service'; then
-        service_name="ssh"
-    elif systemctl list-unit-files | grep -q '^sshd\.service'; then
-        service_name="sshd"
-    else
-        echo -e "${rojo} No se encontró ningún servicio SSH registrado en systemd${borra_colores}"
-        echo ""
-        return 2
-    fi
-
-    # 2️⃣ Comprobar si está en ejecución
-    if systemctl is-active --quiet "$service_name"; then
-        echo -e " - Ejecucion del servicio${azul} $service_name${verde} OK${borra_colores}"
-    else
-        echo -e " - Ejecucion del servicio${azul} $service_name ${amarillo}KO${borra_colores}"
-    fi
-
-    # 3️⃣ Comprobar si está habilitado al arranque
-    if systemctl is-enabled --quiet "$service_name"; then
-        echo -e " - Servicio habilitado en el arranque${azul} $service_name ${verde}OK${borra_colores}"
-    else
-        echo -e " - Servicio habilitado en el arranque${azul} $service_name ${amarillo}KO${borra_colores}"
-    fi
-
-    # 4️⃣ Detectar el puerto configurado (en /etc/ssh/sshd_config)
-    local ssh_port
-    if [ -f /etc/ssh/sshd_config ]; then
-        ssh_port=$(grep -E '^Port ' /etc/ssh/sshd_config | awk '{print $2}' | tail -n 1)
-        # Si no hay línea Port, usar el valor por defecto (22)
-        if [ -z "$ssh_port" ]; then
-            ssh_port=22
-        fi
-        echo -e " - El servidor SSH usa el puerto:${azul} $ssh_port${borra_colores}"
-    else
-        echo -e "${rojo} No se encontró el archivo de configuración${borra_colores} /etc/ssh/sshd_config"
-    fi
-
-    # 5️⃣ Verificar si el puerto está escuchando
-    if ss -tlnp 2>/dev/null | grep -q ":$ssh_port "; then
-        echo -e " - El puerto${verde} $ssh_port ${borra_colores}está escuchando conexiones SSH"
-    else
-        echo -e "${amarillo} - El puerto${borra_colores} $ssh_port ${amarillo}no está escuchando (el servicio puede estar detenido o bloqueado por firewall)${borra_colores}"
-    fi
-
-    echo ""
-}
 
 
 # Función para activar x11
@@ -486,13 +435,16 @@ comprobar_estados(){
     # Obtener estado actual
     estado_actual=$(grep -Ei '^\s*#?\s*PasswordAuthentication' "$ssh_config" | tail -n1)
 
-   #if echo "$estado_actual" | grep -qi "yes"; then
-   #     # Está activado → desactivar
-   #3     estado_password="Activado"
-   # else
-   #     # Está desactivado → activar
-   #     estado_password="Desactivado"
-   # fi
+    # Detectar nombre del servicio
+    if systemctl list-units --type=service | grep -qE 'ssh\.service'; then
+        servicio_ssh="ON ssh"
+    elif systemctl list-units --type=service | grep -qE 'sshd\.service'; then
+        servicio_ssj="ON sshd"
+    else
+        servicio_ssh "No activo SSH"
+        return 1
+    fi
+
 }
 
 activar_desactivar_password() {
@@ -536,12 +488,15 @@ menu_info
 ssh_config="/etc/ssh/sshd_config"
 
 echo ""
-check_ssh_status
 comprobar_estados
 echo -e "${azul} --- MENU DE OPCIONES ---${borra_colores}"
 echo ""
+echo -e "${azul} 1. ${amarillo}Activar/Desactivar${borra_colores} servidor ssh. Estado = [ $servicio_ssh ]"
+
+
+
 echo -e "${azul}  1. ${verde}Activar/desactivar${borra_colores} la autenticación por contraseña. Estado = [ $estado_actual ]"
-echo -e "${azul}  2. ${amarillo}Desactivar${borra_colores} la autenticación por contraseña."
+
 echo -e "${azul}  3. ${borra_colores}Editar el fichero de configuracion."
 echo -e "${azul}  4. ${borra_colores}Cambiar puerto de escucha del ssh."
 echo -e "${azul}  5. ${verde}Activar${borra_colores} reenvío (forwarding) del entorno gráfico."
