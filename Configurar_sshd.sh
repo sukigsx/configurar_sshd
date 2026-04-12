@@ -424,11 +424,11 @@ comprobar_estados(){
         #return 1
     fi
 
-    # Estado del servicio
-    if systemctl is-active --quiet "$servicio"; then
-        estado="Demonio ACTIVO"
+    # Estado del servicio sshd enable o disable el demonio
+    if systemctl is-enable --quiet "$servicio"; then
+        estado="Activado"
     else
-        estado="Demonio INACTIVO"
+        estado="Desactivado"
     fi
 
     # Puerto configurado
