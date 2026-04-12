@@ -343,6 +343,19 @@ fi
 # EMPIEZA LO GORDO
 
 
+# Activar/desactivar el servicio
+ssh_onoff(){
+# Comprobar estado actual
+    if systemctl is-active --quiet "$servicio"; then
+        # Está activo → parar
+        sudo systemctl stop "$servicio"
+    else
+        # Está parado → arrancar
+        sudo systemctl start "$servicio"
+    fi
+    sudo systemctl restart $servicio
+}
+
 # Función para activar x11
 activar_x11() {
     sudo sed -i '/X11Forwarding/ c\        X11Forwarding yes' "$ssh_config"
@@ -485,7 +498,7 @@ read -p " Seleciona opcion del menu -> " opcion
 
 case $opcion in
     1)  #Activar/Desactivarvservidor ssh.
-
+        ssh_onoff
         ;;
     2)  #Activar/Desactivar demonio del servidor ssh
 
