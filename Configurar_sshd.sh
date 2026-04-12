@@ -410,25 +410,7 @@ else
   echo "Port $nuevo_puerto" >> "$conf"
 fi
 
-##echo ""
-##echo -e "${verde} Puerto SSH cambiado a${borra_colores} $nuevo_puerto ${verde}en${borra_colores} $conf"; sleep 1
-
-# Reiniciar el servicio SSH
-##echo ""
-##echo -e "${azul} Reiniciando el servicio SSH...${borra_colores}"; sleep 2
 sudo systemctl restart $servicio
-read p
-
-# Verificar si el servicio se reinició correctamente
-#if systemctl is-active --quiet sshd; then
-#  echo ""
-#  echo -e "${verde} El servidor SSH ahora escucha en el puerto${borra_colores} $nuevo_puerto."; sleep 1
-#else
-#  echo ""
-#  echo -e "${rojo} Error al reiniciar el servicio SSH. Revisa la configuración manualmente.${borra_colores}"; sleep 2
-#  return
-#fi
-
 }
 
 comprobar_estados(){
@@ -439,7 +421,7 @@ comprobar_estados(){
         servicio="sshd"
     else
         servicio="Desactivado"
-        return 1
+        #return 1
     fi
 
     # Estado del servicio
