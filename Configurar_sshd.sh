@@ -471,10 +471,10 @@ activar_desactivar_password() {
 ssh_enable_disable(){
     if systemctl is-enabled --quiet "$servicio"; then
         sudo systemctl disable "$servicio"
-        ssh_enabledisable="Avtivado"
+        ssh_enabledisable="Activado" > /dev/null 2>&1
     else
         sudo systemctl enable "$servicio"
-        ssh_enabledisable="Desactivado"
+        ssh_enabledisable="Desactivado" > /dev/null 2>&1
     fi
     sudo systemctl restar $servicio
 }
