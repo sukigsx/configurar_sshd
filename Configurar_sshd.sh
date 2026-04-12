@@ -500,9 +500,51 @@ fi
 
 }
 
+comprobar_estados(){
+    #estado del PasswordAuthentication
+    # Obtener estado actual
+    estado_actual=$(grep -Ei '^\s*#?\s*PasswordAuthentication' "$ssh_config" | tail -n1)
+
+    if echo "$estado_actual" | grep -qi "yes"; then
+        # Está activado → desactivar
+        estado_password="OFF"
+    else
+        # Está desactivado → activar
+        estado_password="ON"
+    fi
+}
+
+toggle_password() {
+    # Obtener estado actual
+    estado_actual=$(grep -Ei '^\s*#?\s*PasswordAuthentication' "$ssh_config" | tail -n1)
+
+    if echo "$estado_actual" | grep -qi "yes"; then
+        # Está activado → desactivar
+        sudo sed -i 's/^#\?\s*PasswordAuthentication.*/PasswordAuthentication no/' "$ssh_config"
+        sudo service ssh restart
+        PASSWORD_STATE="OFF"
+
+        echo ""
+        echo -e "${verde}La autenticación por contraseña${borra_colores} DESACTIVADA."
+    else
+        # Está desactivado → activar
+        sudo sed -i 's/^#\?\s*PasswordAuthentication.*/PasswordAuthentication yes/' "$ssh_config"
+        sudo service ssh restart
+        PASSWORD_STATE="ON"
+
+        echo ""
+        echo -e "${verde}La autenticación por contraseña${borra_colores} ACTIVADA."
+    fi
+}
+
+
+
+
+
 # Ruta al archivo de configuración de SSH
 ssh_config="/etc/ssh/sshd_config"
 check_root
+comprobar_estados
 # Menú de opciones
 while :
 do
@@ -527,6 +569,7 @@ echo -e "${azul}  7. ${verde}Activar${borra_colores} demonio del servidor ssh."
 echo -e "${azul}  8. ${amarillo}Desactivar${borra_colores} demonio del servidor ssh."
 echo -e "${azul}  9. ${verde}Activar${borra_colores} servidor ssh."
 echo -e "${azul} 10. ${amarillo}Desactivar${borra_colores} servidor ssh."
+echo -e "${azul} 11. ${amarillo}esta o no${borra_colores} estado = $estado_password."
 echo ""
 echo -e "${azul} 99. ${borra_colores}Salir."
 echo ""
