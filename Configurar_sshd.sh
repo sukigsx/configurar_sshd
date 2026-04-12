@@ -507,10 +507,10 @@ comprobar_estados(){
 
     if echo "$estado_actual" | grep -qi "yes"; then
         # Está activado → desactivar
-        estado_password="OFF"
+        estado_password="Activado"
     else
         # Está desactivado → activar
-        estado_password="ON"
+        estado_password="Desactivado"
     fi
 }
 
@@ -544,7 +544,7 @@ toggle_password() {
 # Ruta al archivo de configuración de SSH
 ssh_config="/etc/ssh/sshd_config"
 check_root
-comprobar_estados
+
 # Menú de opciones
 while :
 do
@@ -556,10 +556,10 @@ ssh_config="/etc/ssh/sshd_config"
 
 echo ""
 check_ssh_status
-
+comprobar_estados
 echo -e "${azul} --- MENU DE OPCIONES ---${borra_colores}"
 echo ""
-echo -e "${azul}  1. ${verde}Activar${borra_colores} la autenticación por contraseña."
+echo -e "${azul}  1. ${verde}Activar/desactivar${borra_colores} la autenticación por contraseña. Estadoa actual [ $estado_actual ]"
 echo -e "${azul}  2. ${amarillo}Desactivar${borra_colores} la autenticación por contraseña."
 echo -e "${azul}  3. ${borra_colores}Editar el fichero de configuracion."
 echo -e "${azul}  4. ${borra_colores}Cambiar puerto de escucha del ssh."
@@ -569,7 +569,6 @@ echo -e "${azul}  7. ${verde}Activar${borra_colores} demonio del servidor ssh."
 echo -e "${azul}  8. ${amarillo}Desactivar${borra_colores} demonio del servidor ssh."
 echo -e "${azul}  9. ${verde}Activar${borra_colores} servidor ssh."
 echo -e "${azul} 10. ${amarillo}Desactivar${borra_colores} servidor ssh."
-echo -e "${azul} 11. ${amarillo}esta o no${borra_colores} estado = $estado_password."
 echo ""
 echo -e "${azul} 99. ${borra_colores}Salir."
 echo ""
