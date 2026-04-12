@@ -429,15 +429,17 @@ comprobar_estados(){
     # Detectar nombre del servicio
     if systemctl list-units --type=service | grep -qE 'ssh\.service'; then
         servicio="ssh"
+        servicio_ssh="ssh"
     elif systemctl list-units --type=service | grep -qE 'sshd\.service'; then
         servicio="sshd"
+        servicio_ssh="sshd"
     else
         servicio="Desactivado"
         #return 1
     fi
 
     # Estado del servicio sshd enable o disable el demonio
-    if systemctl is-enabled --quiet "$servicio"; then
+    if systemctl is-enabled --quiet "$servicio_ssh"; then
         estado="Activado"
     else
         estado="Desactivado"
