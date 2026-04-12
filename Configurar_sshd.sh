@@ -353,7 +353,6 @@ ssh_onoff(){
         # Está parado → arrancar
         sudo systemctl start "$servicio"
     fi
-    sudo systemctl restart $servicio
 }
 
 # Función para activar x11
