@@ -417,6 +417,7 @@ fi
 ##echo ""
 ##echo -e "${azul} Reiniciando el servicio SSH...${borra_colores}"; sleep 2
 sudo systemctl restart $servicio
+read p
 
 # Verificar si el servicio se reinició correctamente
 #if systemctl is-active --quiet sshd; then
