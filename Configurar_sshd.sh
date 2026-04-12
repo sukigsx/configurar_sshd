@@ -38,7 +38,7 @@ nombre_carpeta_repositorio="Configurar_sshd.sh" #poner el nombre de la carpeta c
         [ssh]="ssh"
         [nano]="nano"
         [which]="which"
-        [systemd]="systemctl"
+        [systemctl]="systemd"
         [ssh]="ssh"
     )
 ###########################
