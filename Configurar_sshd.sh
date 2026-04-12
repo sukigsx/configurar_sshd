@@ -425,7 +425,7 @@ comprobar_estados(){
     fi
 
     # Estado del servicio sshd enable o disable el demonio
-    if systemctl is-enable --quiet "$servicio"; then
+    if systemctl is-enabled --quiet "$servicio"; then
         estado="Activado"
     else
         estado="Desactivado"
